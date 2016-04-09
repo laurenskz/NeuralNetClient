@@ -1,0 +1,30 @@
+group 'ptgf'
+version ''
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile name: 'org.jenetics-3.4.0'
+    compile name: 'json-20160212'
+    compile name: 'Neuralnetwork-0.7'
+    compile name: 'othello-0.1-42'
+}
+
+jar {
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest {
+        attributes 'Main-Class': 'client.Main'
+    }
+}
