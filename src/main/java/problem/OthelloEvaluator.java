@@ -6,6 +6,7 @@ import othello.Board;
 import othello.Game;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * Created by Laurens on 8-4-2016.
@@ -13,15 +14,16 @@ import java.awt.*;
 public class OthelloEvaluator {
 
 
-    public static final int GAME_CYCLES = 178;
+    public static final int GAME_CYCLES = 271;
     private int side;
     private int opponent;
     private static final String[] names = new String[]{"a","b"};
+    private Random random = new Random(8766);
 
     public double evaluate(Network network){
         double score = 0;
         for (int i = 0; i < GAME_CYCLES; i++) {
-            side = RandomRegistry.getRandom().nextInt(2)+1;
+            side = random.nextInt(2)+1;
             opponent = side==1?2:1;
             score += playGame(network);
         }
@@ -65,7 +67,7 @@ public class OthelloEvaluator {
 
     private int opponentMove(Game game){
         Point[] possibleMoves = game.getBoard().getPossibleMoves(opponent);
-        return pointToInt(possibleMoves[RandomRegistry.getRandom().nextInt(possibleMoves.length)]);
+        return pointToInt(possibleMoves[random.nextInt(possibleMoves.length)]);
     }
 
     private int pointToInt(Point point) {
@@ -83,5 +85,13 @@ public class OthelloEvaluator {
             }
         }
         return network.evaluate(input);
+    }
+
+    public static void main(String[] args) {
+        Network network = new Network(128,64);
+        network.insertLayer(86,1);
+        long time = System.currentTimeMillis();
+        System.out.println("Score = " + new OthelloEvaluator().evaluate(network));
+        System.out.println("It took = " + (System.currentTimeMillis()-time));
     }
 }
