@@ -1,30 +1,19 @@
 package othello;
 
-import othello.gui.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 
 /**
  * The Game class is the primary part of the Model.
  * This contains all the information and the manipulation methods for playing the game.
  * It is extended from AbstractModel to give data to the GameView
  */
-public class Game extends AbstractModel {
+public class Game {
     //contains the actual board and pieces to track internally.
     private final Board board;
     private int setSide;
     private int setLocation;
-
-    // Temporary storage for all changes to the board.
-    private ArrayList<Move> moves = new ArrayList<>();
-
-    private LinkedList<ActionListener> listeners = new LinkedList<>();
-
     // Contains the current state of the players
     private Players playerState;
 
@@ -215,9 +204,6 @@ public class Game extends AbstractModel {
      */
     public void setClientBegins(boolean clientBegins) {
         playerState.setClientStarts(clientBegins);
-        if (clientBegins) {
-            doClientTurn();
-        }
     }
 
 
@@ -225,63 +211,7 @@ public class Game extends AbstractModel {
         return playerState.isClientTurn();
     }
 
-    /**
-     * Enables buttons for Client
-     */
-    private void doClientTurn() {
-        fire(new ActionEvent(this, AbstractModel.TURN_START, "CLIENT IS ON SET"));
-    }
 
-
-    /**
-     * adds ActionListener to the list.
-     *
-     * @param listener
-     */
-    public void addActionListener(ActionListener listener) {
-        listeners.add(listener);
-        int[][] test = new int[3][3];
-    }
-
-    /**
-     * Fires event to all subscribed listeners.
-     *
-     * @param event
-     */
-    public void fire(ActionEvent event) {
-        listeners.forEach(listener -> listener.actionPerformed(event));
-    }
-
-    /**
-     * Adds changed added or flipped pieces to list to be processed.
-     *
-     * @param location
-     * @param player
-     */
-    public void piecePlaced(Point location, int player) {
-        moves.add(new Move(player, pointToInt(location)));
-    }
-
-    /**
-     * Executes all changes to the Board.
-     */
-    public void fireEvents() {
-        Arrays.stream(clearMoves())
-                .peek(move -> setSide = move.player)
-                .peek(move -> setLocation = move.location)
-                .forEach(move -> fire(new ActionEvent(this, AbstractModel.PLACE_PIECE, "Place Piece")));
-    }
-
-    /**
-     * clears out and returns list of changes to the Board.
-     *
-     * @return
-     */
-    public Move[] clearMoves() {
-        Move[] moveList = moves.toArray(new Move[0]);
-        moves.clear();
-        return moveList;
-    }
 
     /**
      * Converts the location from an Integer into a Point(x,y)
@@ -316,27 +246,15 @@ public class Game extends AbstractModel {
                 //game finished
             }
         }
-        //Informs Views
-        fire(new ActionEvent(this, AbstractModel.TURN_END, "COMPUTER_TURN"));
 
     }
 
-    /**
-     * Starts the next turn
-     */
-    public void turnStart() {
-        if (playerState.isClientTurn()) {
-            doClientTurn();
-        }
-    }
 
     /**
      * Sets the Board up for a standarized games
      */
     public void prepareStandardGame() {
         board.prepareStandardGame();
-        //informs the View of the new pieces
-        fireEvents();
     }
 
     /**
@@ -345,7 +263,6 @@ public class Game extends AbstractModel {
      *
      * @return Array with all valid locations
      */
-    @Override
     public int[] getValidSets() {
         return Arrays.stream(board.getPossibleMoves(playerState.currentPlayer))
                 .mapToInt(this::pointToInt)
@@ -358,7 +275,6 @@ public class Game extends AbstractModel {
      *
      * @return
      */
-    @Override
     public int getSetLocation() {
         return setLocation;
     }
@@ -369,7 +285,6 @@ public class Game extends AbstractModel {
      *
      * @return
      */
-    @Override
     public int getSide() {
         return setSide;
     }

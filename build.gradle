@@ -18,7 +18,6 @@ dependencies {
     compile name: 'org.jenetics-3.4.0'
     compile name: 'json-20160212'
     compile name: 'Neuralnetwork-0.7'
-    compile name: 'othello-0.1-42'
 }
 
 jar {

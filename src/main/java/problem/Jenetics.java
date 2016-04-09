@@ -41,7 +41,7 @@ public class Jenetics {
         iteration = 1;
         while(model.isRunning()){
             EvolutionResult<DoubleGene,Double>  result = engine.stream(population, iteration)
-                    .limit(100)
+                    .limit(1)
                     .collect(EvolutionResult.toBestEvolutionResult());
             Phenotype<DoubleGene,Double> best = result.getBestPhenotype();
             uploadBestNetwork(best);

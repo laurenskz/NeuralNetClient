@@ -98,7 +98,6 @@ public class Board {
      */
     private void setAtLocation(Point location, int player) {
         board[location.x][location.y] = player;
-        game.piecePlaced(location, player);
     }
 
     /**
@@ -136,7 +135,6 @@ public class Board {
      * Prepares a standard 8 by 8 game.
      */
     public void prepareStandardGame() {
-        clear();
         setAtLocation(new Point(3, 3), PLAYER_2);
         setAtLocation(new Point(4, 3), PLAYER_1);
         setAtLocation(new Point(3, 4), PLAYER_1);

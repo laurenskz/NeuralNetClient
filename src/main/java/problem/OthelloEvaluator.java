@@ -6,6 +6,7 @@ import othello.Board;
 import othello.Game;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -88,10 +89,11 @@ public class OthelloEvaluator {
     }
 
     public static void main(String[] args) {
+        long time = System.currentTimeMillis();
         Network network = new Network(128,64);
         network.insertLayer(86,1);
-        long time = System.currentTimeMillis();
         System.out.println("Score = " + new OthelloEvaluator().evaluate(network));
+
         System.out.println("It took = " + (System.currentTimeMillis()-time));
     }
 }
